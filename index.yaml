@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   ssl-pinning:
   - apiVersion: v2
+    created: "2026-03-28T15:22:08.242582549Z"
+    dependencies:
+    - name: helm-apps
+      repository: '@helm-apps'
+      version: ~1
+    digest: d784091a17b26a2b47f9c58ac5a1d00c3f2bc97fed3f71258b7f790d556cc4cc
+    name: ssl-pinning
+    urls:
+    - https://github.com/ssl-pinning/charts/releases/download/ssl-pinning-1.0.2/ssl-pinning-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     created: "2026-03-28T14:17:19.797199072Z"
     dependencies:
     - name: helm-apps
@@ -12,4 +23,4 @@ entries:
     urls:
     - https://github.com/ssl-pinning/charts/releases/download/ssl-pinning-1.0.1/ssl-pinning-1.0.1.tgz
     version: 1.0.1
-generated: "2026-03-28T14:17:19.797211215Z"
+generated: "2026-03-28T15:22:08.242598278Z"
