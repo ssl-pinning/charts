@@ -1,0 +1,65 @@
+apps-secrets:
+  ssl-pinning-tls:
+    data:
+      prv.pem: <base64-encoded private key>
+
+apps-configmaps:
+  ssl-pinning-config:
+    data:
+      config.yaml: |
+        keys:
+          - fqdn: google.com
+            domainName: "www.google.com"
+          - fqdn: mail.google.com
+            file: google.com.json
+            domainName: "mail.google.com"
+        server:
+          listen: 0.0.0.0:7500
+
+apps-stateless:
+  ssl-pinning:
+    replicas: 1
+    containers:
+      app:
+        image:
+          name: ghcr.io/dhalturin/ssl-pinning
+          staticTag: v1.1.0
+        ports: |
+          - name: http
+            containerPort: 7500
+        env:
+          SSL_PINNING_SERVER_LISTEN: 0.0.0.0:7500
+          SSL_PINNING_STORAGE_TYPE: memory
+          SSL_PINNING_TLS_DIR: /opt/ssl-pinning/tls
+          SSL_PINNING_TLS_DUMP_INTERVAL: 1s
+        volumeMounts: |
+          - name: tls
+            mountPath: /opt/ssl-pinning/tls
+            readOnly: true
+          - name: config
+            mountPath: /etc/ssl-pinning
+            readOnly: true
+    volumes: |
+      - name: tls
+        secret:
+          secretName: ssl-pinning-tls
+      - name: config
+        configMap:
+          name: ssl-pinning-config
+    service:
+      enabled: true
+
+apps-ingresses:
+  ssl-pinning:
+    class: nginx
+    rules: |
+      - host: ssl-pinning.example.com
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: ssl-pinning
+                  port:
+                    number: 7500

@@ -1,0 +1,32 @@
+name: build & push charts
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-charts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - uses: azure/setup-helm@v4
+
+      - run: helm repo add helm-apps https://helm-apps.github.io/lib
+
+      - uses: helm/chart-releaser-action@v1.7.0
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          charts_dir: charts
+          config: cr.yaml
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
