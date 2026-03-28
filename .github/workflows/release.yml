@@ -37,3 +37,21 @@ jobs:
           config: cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Update versions in docs
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          CHART_VERSION=$(grep '^version:' charts/ssl-pinning/Chart.yaml | awk '{print $2}')
+          APP_VERSION=$(grep '^appVersion:' charts/ssl-pinning/Chart.yaml | awk '{print $2}')
+
+          git fetch origin gh-pages
+          git checkout gh-pages
+
+          sed -i "s|<span>Chart version</span><span>[^<]*</span>|<span>Chart version</span><span>${CHART_VERSION}</span>|g" index.html
+          sed -i "s|<span>App version</span><span>[^<]*</span>|<span>App version</span><span>${APP_VERSION}</span>|g" index.html
+          sed -i "s|<span class=\"nm\">staticTag</span>: <span class=\"st\">[^<]*</span>|<span class=\"nm\">staticTag</span>: <span class=\"st\">${APP_VERSION}</span>|g" index.html
+
+          git add index.html
+          git diff --staged --quiet || git commit -m "docs: update versions to chart=${CHART_VERSION} app=${APP_VERSION} [skip ci]"
+          git push origin gh-pages
+          git checkout master
