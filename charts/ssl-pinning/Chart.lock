@@ -1,6 +1,6 @@
 dependencies:
 - name: helm-apps
   repository: https://helm-apps.github.io/lib
-  version: "1.3"
-digest: sha256:6ffdc82c7ed5e761c8191585b0be738280cda561ccbc2bbffa88cc0f4258dab9
-generated: "2026-03-28T14:26:25.381321+01:00"
+  version: 1.3.1
+digest: sha256:d575aa6f4e03e6b3cac62a56e2ab365828bd6a95894acdf891eb51b4fc5d5b1c
+generated: "2026-03-28T15:43:03.190174+01:00"

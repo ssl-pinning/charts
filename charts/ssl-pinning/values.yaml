@@ -1,3 +1,6 @@
+global:
+  env: staging
+
 apps-secrets:
   ssl-pinning-tls:
     data:
