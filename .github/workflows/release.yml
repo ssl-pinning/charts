@@ -41,8 +41,8 @@ jobs:
       - name: Update versions in docs
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
-          CHART_VERSION=$(grep '^version:' charts/ssl-pinning/Chart.yaml | awk '{print $2}')
-          APP_VERSION=$(grep '^appVersion:' charts/ssl-pinning/Chart.yaml | awk '{print $2}')
+          CHART_VERSION=$(awk '/^version:/{print $2}' charts/ssl-pinning/Chart.yaml)
+          APP_VERSION=$(awk '/^appVersion:/{print $2}' charts/ssl-pinning/Chart.yaml)
 
           git fetch origin gh-pages
           git checkout gh-pages
