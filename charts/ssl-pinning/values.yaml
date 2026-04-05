@@ -26,7 +26,7 @@ apps-stateless:
       app:
         image:
           name: ghcr.io/ssl-pinning/ssl-pinning
-          staticTag: v1.0.0
+          staticTag: "{{ $.Chart.AppVersion }}"
         ports: |
           - name: http
             containerPort: 7500
